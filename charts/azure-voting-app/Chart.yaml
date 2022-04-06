@@ -1,0 +1,5 @@
+apiVersion: v2
+description: A Helm chart for Azure Voting App
+name: azure-voting-app
+version: 0.1.0
+appVersion: 1.0.0

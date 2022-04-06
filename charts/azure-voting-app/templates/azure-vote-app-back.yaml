@@ -1,0 +1,33 @@
+{{- $serviceName := include "name" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $serviceName }}-{{ .Values.azureVoteBack.deployment.name }}
+  labels:
+{{ include "labels.standard" . | indent 4 }}
+    component: {{ $serviceName }}-{{ .Values.azureVoteBack.deployment.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ $serviceName }}-{{ .Values.azureVoteBack.deployment.name }}
+  template:
+    metadata:
+      labels:
+{{ include "labels.standard" . | indent 8 }}
+        component: {{ $serviceName }}-{{ .Values.azureVoteBack.deployment.name }}
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      containers:
+      - name: {{ $serviceName }}-{{ .Values.azureVoteBack.deployment.name }}
+        image: "redis:{{ .Values.azureVoteBack.deployment.imageTag }}"
+        imagePullPolicy: {{ .Values.azureVoteBack.deployment.imagePullPolicy }}
+        ports:
+        - containerPort: 6379
+          name: redis
+        env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+        resources:
+{{ toYaml .Values.azureVoteBack.deployment.resources | indent 10 }}

@@ -1,0 +1,23 @@
+version: "3.4"
+services:
+  azure-vote-back:
+    image: redis:latest
+    container_name: azure-vote-back
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - 6379:6379
+
+  azure-vote-front:
+    image: azure-vote-front
+    container_name: azure-vote-front
+    depends_on:
+      - azure-vote-back
+    build:
+      context: azure-vote
+      dockerfile: ./Dockerfile
+    environment:
+      ConnectionStrings__RedisHost: azure-vote-back
+    ports:
+      - 80:80
+      - 443:443

@@ -1,0 +1,41 @@
+# Default values for azure-voting-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+azureVoteFront:
+  service:
+    name: front
+    type: LoadBalancer
+    externalPort: 80
+
+  deployment:
+    replicas: 1
+    name: front
+    image: ghcr.io/rahulrai-in/azure-voting-app-dotnet
+    imageTag: latest
+    imagePullPolicy: Always
+    internalPort: 80
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+
+azureVoteBack:
+  service:
+    name: back
+    type: ClusterIP
+
+  deployment:
+    name: back
+    imageTag: latest
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 500m
+        memory: 500Mi
+      requests:
+        cpu: 500m
+        memory: 500Mi

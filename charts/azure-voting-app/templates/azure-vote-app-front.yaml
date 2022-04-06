@@ -1,0 +1,37 @@
+{{- $serviceName := include "name" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $serviceName }}-{{ .Values.azureVoteFront.deployment.name }}
+  labels:
+{{ include "labels.standard" . | indent 4 }}
+    component: {{ $serviceName }}-{{ .Values.azureVoteFront.deployment.name }}
+spec:
+  replicas: {{ .Values.azureVoteFront.deployment.replicas }}
+  selector:
+    matchLabels:
+      component: {{ $serviceName }}-{{ .Values.azureVoteFront.deployment.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+{{ include "labels.standard" . | indent 8 }}
+        component: {{ $serviceName }}-{{ .Values.azureVoteFront.deployment.name }}
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      containers:
+      - name: {{ $serviceName }}-{{ .Values.azureVoteFront.deployment.name }}
+        image: "{{ .Values.azureVoteFront.deployment.image }}:{{ .Values.azureVoteFront.deployment.imageTag }}"
+        imagePullPolicy: {{ .Values.azureVoteFront.deployment.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.azureVoteFront.deployment.internalPort }}
+        env:
+        - name: ConnectionStrings__RedisHost
+          value: {{ $serviceName }}-{{ .Values.azureVoteBack.service.name }}
+        resources:
+{{ toYaml .Values.azureVoteFront.deployment.resources | indent 10 }}

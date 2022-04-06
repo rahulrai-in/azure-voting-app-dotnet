@@ -1,0 +1,45 @@
+﻿@page "/"
+@using AzureVote.Data
+
+@inject VoteService VoteService
+
+<PageTitle>@_title</PageTitle>
+
+@if (_votes == default)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <div id="container">
+        <div style="text-align: center;">
+            <div id="logo">@_title</div>
+            <div id="space"></div>
+            <div id="form">
+                <button name="vote" @onclick="async () => await IncrementVoteAsync(1)" class="button button1">@_votes.Vote1.Label</button>
+                <button name="vote" @onclick="async () => await IncrementVoteAsync(2)" class="button button2">@_votes.Vote2.Label</button>
+                <button name="vote" value="reset" @onclick="async () => await ResetVotesAsync()" class="button button3">Reset</button>
+                <div id="space"></div>
+                <div id="space"></div>
+                <div id="results"> @_votes.Vote1.Label - @_votes.Vote1.Count | @_votes.Vote2.Label - @_votes.Vote2.Count </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    (Vote Vote1, Vote Vote2) _votes;
+    string _title = "Title";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _votes = await VoteService.GetVotesAsync();
+        _title = VoteService.GetTitle();
+    }
+
+    private async Task IncrementVoteAsync(int candidateId) => _votes = await VoteService.IncrementVoteAsync(candidateId);
+
+    private async Task ResetVotesAsync() => _votes = await VoteService.ResetVotesAsync();
+}
