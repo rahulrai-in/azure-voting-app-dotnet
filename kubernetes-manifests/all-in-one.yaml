@@ -28,7 +28,7 @@ spec:
               cpu: 250m
             limits:
               cpu: 500m
-              memory: 250m
+              memory: 500M
 ---
 apiVersion: v1
 kind: Service
@@ -71,7 +71,7 @@ spec:
               cpu: 250m
             limits:
               cpu: 500m
-              memory: 250m
+              memory: 500M
           env:
             - name: ConnectionStrings__RedisHost
               value: "azure-vote-back"
