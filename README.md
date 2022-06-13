@@ -14,7 +14,7 @@ This sample also includes the following features:
 ## Note
 
 1. The previous version of this application used [prometheus-net](https://github.com/prometheus-net/prometheus-net) to expose metrics to Prometheus on the `/metrics` endpoint. The main branch uses OTEL Metrics SDK to send metrics to the destination. You can use the commit tagged [prometheus-metrics](https://github.com/rahulrai-in/azure-voting-app-dotnet/tree/prometheus-metrics) to refer to the previous version of the application.
-2. The application sends traces and metrics to the console exporter by default. You can uncomment the relevant code in the `Program.cs` file to send traces and metrics to the local OTEL collector, which can be enabled with the following command.
+2. The application sends traces and metrics to the console exporter by default. You can set the environment variable `EnableOtlpExporter` to `true` to send traces and metrics to the local OTEL collector. Update the values of the connection strings `OTLPMetricsExporterEndpoint` and `OTLPTracesExporterEndpoint` if you want to send the metrics and traces to a remote OTLP endpoint. You can launch the application and the local OTEL collector with the following command:
 
 ```bash
 docker-compose --profile local-collector up

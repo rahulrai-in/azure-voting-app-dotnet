@@ -9,9 +9,6 @@ builder.Services.AddSingleton<VoteService>();
 var redisConnection = ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisHost"));
 builder.Services.AddSingleton<IConnectionMultiplexer>(redisConnection);
 
-// Hostname of OTLP collector
-var otlpExporterHost = builder.Configuration.GetConnectionString("OTLPExporterHost");
-
 // Application settings
 builder.Services.Configure<VoteAppSettings>(builder.Configuration.GetSection(nameof(VoteAppSettings)));
 
@@ -70,7 +67,7 @@ builder.Services.AddOpenTelemetryTracing(tracerProviderBuilder =>
             // Exports spans to an OTLP endpoint. Use this for exporting traces to collector or a backend that support OTLP over HTTP
             tracerProviderBuilder.AddOtlpExporter(otlpOptions =>
             {
-                otlpOptions.Endpoint = new($"http://{otlpExporterHost}/v1/traces");
+                otlpOptions.Endpoint = new(builder.Configuration.GetConnectionString("OTLPTracesExporterEndpoint"));
                 otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
             });
         }
@@ -95,7 +92,7 @@ builder.Services.AddOpenTelemetryMetrics(meterProviderBuilder =>
             // Exports metrics to an OTLP endpoint. Use this for exporting metrics to collector or a backend that support OTLP over HTTP
             meterProviderBuilder.AddOtlpExporter(otlpOptions =>
             {
-                otlpOptions.Endpoint = new($"http://{otlpExporterHost}/v1/metrics");
+                otlpOptions.Endpoint = new(builder.Configuration.GetConnectionString("OTLPMetricsExporterEndpoint"));
                 otlpOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
             });
         }
