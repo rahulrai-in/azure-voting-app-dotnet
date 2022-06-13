@@ -8,6 +8,6 @@ public class Vote
         Count = count;
     }
 
-    public string Label { get; set; } = "Candidate";
+    public string Label { get; set; }
     public long Count { get; set; }
 }

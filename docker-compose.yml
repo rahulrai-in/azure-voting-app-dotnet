@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.9"
 services:
   azure-vote-back:
     image: redis:latest
@@ -21,3 +21,10 @@ services:
     ports:
       - 80:80
       - 443:443
+
+  azure-vote-collector:
+    image: otel/opentelemetry-collector:latest
+    ports:
+      - 4318:4318
+    profiles:
+      - local-collector

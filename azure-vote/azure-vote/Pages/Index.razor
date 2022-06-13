@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using AzureVote.Data
 
 @inject VoteService VoteService
 
@@ -39,7 +38,14 @@ else
         _title = VoteService.GetTitle();
     }
 
-    private async Task IncrementVoteAsync(int candidateId) => _votes = await VoteService.IncrementVoteAsync(candidateId);
+    private async Task IncrementVoteAsync(int candidateId)
+    {
+        _votes = await VoteService.IncrementVoteAsync(candidateId);
+    }
 
-    private async Task ResetVotesAsync() => _votes = await VoteService.ResetVotesAsync();
+    private async Task ResetVotesAsync()
+    {
+        _votes = await VoteService.ResetVotesAsync();
+    }
+
 }
