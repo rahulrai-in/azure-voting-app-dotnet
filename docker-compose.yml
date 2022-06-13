@@ -20,12 +20,13 @@ services:
       ConnectionStrings__RedisHost: azure-vote-back
       # Set the following parameter to true if you want to send traces and metrics to the local OTEL collector
       EnableOtlpExporter: false
+      ConnectionStrings__OTLPExporterHost: azure-vote-collector:4318
     ports:
       - 80:80
-      - 443:443
 
   azure-vote-collector:
     image: otel/opentelemetry-collector:latest
+    container_name: azure-vote-collector
     ports:
       - 4318:4318
     profiles:
