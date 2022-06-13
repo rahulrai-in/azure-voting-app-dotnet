@@ -18,6 +18,8 @@ services:
       dockerfile: ./Dockerfile
     environment:
       ConnectionStrings__RedisHost: azure-vote-back
+      # Set the following parameter to true if you want to send traces and metrics to the local OTEL collector
+      EnableOtlpExporter: false
     ports:
       - 80:80
       - 443:443
